@@ -65,16 +65,4 @@ public class HammingCode {
 
 		return 1 - (probZeroErrors + probOneError);
 	}
-
-	public static int nCr(int n, int r) {
-		return factorial(n) / (factorial(n - r) * factorial(r));
-	}
-
-	public static int factorial(int n) {
-		if (n <= 1) {
-			return 1;
-		}
-
-		return n * factorial(n - 1);
-	}
 }
