@@ -53,9 +53,12 @@ public class HammingCode {
 		}
 
 		// Precalculate syndromes and error codes.
-		for (int i = 1; i < length + 1; i++) {
-			boolean[] row = errorCodes[i];
-			row[length - i] = true;
+		for (int i = 0; i < length; i++) {
+			boolean[] code = new boolean[length];
+			code[i] = true;
+
+			int syndrome = booleanArrayToInt(getSyndrome(code));
+			errorCodes[syndrome][i] = true;
 		}
 	}
 
@@ -136,5 +139,15 @@ public class HammingCode {
 		double probOneError = length * Math.pow(iChannelNoise, length - 1) * channelNoise;
 
 		return 1 - (probZeroErrors + probOneError);
+	}
+
+	public static int booleanArrayToInt(boolean[] booleans) {
+		int n = 0;
+
+		for (int i = 0; i < booleans.length; i++) {
+			n = (n << 1) | (booleans[i] ? 1 : 0);
+		}
+
+		return n;
 	}
 }

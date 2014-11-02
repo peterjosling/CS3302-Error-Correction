@@ -24,4 +24,17 @@ public class HammingCodeTest extends TestCase {
 		assertTrue(Arrays.equals(code.getSyndrome(new boolean[]{true, true, false}), new boolean[]{false, true}));
 		assertTrue(Arrays.equals(code.getSyndrome(new boolean[]{true, true, true}), new boolean[]{false, false}));
 	}
+
+	@Test
+	public void testBooleanArrayToInt() {
+		boolean[] one = new boolean[]{true};
+		boolean[] two = new boolean[]{true, false};
+		boolean[] three = new boolean[]{true, true};
+		boolean[] ten = new boolean[]{true, false, true, false};
+
+		assertEquals(HammingCode.booleanArrayToInt(one), 1);
+		assertEquals(HammingCode.booleanArrayToInt(two), 2);
+		assertEquals(HammingCode.booleanArrayToInt(three), 3);
+		assertEquals(HammingCode.booleanArrayToInt(ten), 10);
+	}
 }
