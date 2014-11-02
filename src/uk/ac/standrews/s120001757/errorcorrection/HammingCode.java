@@ -93,6 +93,22 @@ public class HammingCode {
 		return data;
 	}
 
+	public boolean[] getErrorCode(boolean[] codeword) {
+		if (codeword.length != length) {
+			return new boolean[0];
+		}
+
+		boolean[] error = new boolean[r];
+
+		for (int i = 0; i < r; i++) {
+			for (int j = 0; j < length; j++) {
+				error[i] ^= codeword[j] & parityCheck[j][i];
+			}
+		}
+
+		return error;
+	}
+
 	public static int getOptimumR(double channelNoise, double maxCorruption) {
 		int r = 1;
 		double totalCorruption = 0;
