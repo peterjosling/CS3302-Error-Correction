@@ -7,6 +7,7 @@ public class HammingCode {
 	private int length;
 	private boolean[][] parityCheck;
 	private boolean[][] generator;
+	private boolean[][] errorCodes;
 
 	public HammingCode(int r) {
 		this.r = r;
@@ -14,6 +15,7 @@ public class HammingCode {
 
 		parityCheck = new boolean[length][r];
 		generator = new boolean[length - r][length];
+		errorCodes = new boolean[length + 1][length];
 
 		// Populate parity check matrix.
 		int currentRow = 0;
@@ -48,6 +50,12 @@ public class HammingCode {
 			for (int j = 0; j < r; j++) {
 				generator[i][dataLength + j] = parityCheck[i][j];
 			}
+		}
+
+		// Precalculate syndromes and error codes.
+		for (int i = 1; i < length + 1; i++) {
+			boolean[] row = errorCodes[i];
+			row[length - i] = true;
 		}
 	}
 
