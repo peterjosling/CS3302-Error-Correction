@@ -36,9 +36,9 @@ public class HammingCode {
 		}
 
 		// Transform to generator matrix.
-		for (int i = 0; i < length; i++) {
-			int dataLength = length - r;
+		int dataLength = length - r;
 
+		for (int i = 0; i < dataLength; i++) {
 			// Insert line of identity matrix.
 			for (int j = 0; j < dataLength; j++) {
 				generator[i][j] = i == j;
