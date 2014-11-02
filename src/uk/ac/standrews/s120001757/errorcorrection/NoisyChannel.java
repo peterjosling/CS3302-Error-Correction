@@ -1,6 +1,5 @@
 package uk.ac.standrews.s120001757.errorcorrection;
 
-import java.util.BitSet;
 import java.util.Random;
 
 public class NoisyChannel {
@@ -11,13 +10,12 @@ public class NoisyChannel {
 		this.p = p;
 	}
 
-	public BitSet transmit(BitSet input) {
-		BitSet output = (BitSet)input.clone();
-		int length = output.size();
+	public boolean[] transmit(boolean[] input) {
+		boolean[] output = input.clone();
 
-		for (int i = 0; i < length; i++) {
-			if (generator.nextDouble() >= p) {
-				output.flip(i);
+		for (int i = 0; i < output.length; i++) {
+			if (generator.nextDouble() <= p) {
+				output[i] = !output[i];
 			}
 		}
 
