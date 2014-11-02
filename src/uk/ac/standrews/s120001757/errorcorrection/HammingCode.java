@@ -4,13 +4,13 @@ public class HammingCode {
 	private static final int R_BOUND = 100;
 
 	private int r;
+	private int length;
 	private boolean[][] parityCheck;
 	private boolean[][] generator;
 
 	public HammingCode(int r) {
 		this.r = r;
-
-		int length = (int)Math.pow(2, r) - 1;
+		this.length = (int)Math.pow(2, r) - 1;
 
 		parityCheck = new boolean[length][r];
 		generator = new boolean[length - r][length];
@@ -29,12 +29,60 @@ public class HammingCode {
 				row = currentRow++;
 			}
 
+			// Insert the current int as binary to the correct index.
 			for (int j = 0; j < r; j++) {
 				parityCheck[row][j] = (i & (1 << (r - 1 - j))) != 0;
 			}
 		}
 
+		// Transform to generator matrix.
+		for (int i = 0; i < length; i++) {
+			int dataLength = length - r;
 
+			// Insert line of identity matrix.
+			for (int j = 0; j < dataLength; j++) {
+				generator[i][j] = i == j;
+			}
+
+			// Copy in line of parity check matrix.
+			for (int j = 0; j < r; j++) {
+				generator[i][dataLength + j] = parityCheck[i][j];
+			}
+		}
+	}
+
+	public boolean[] encode(boolean[] data) {
+		if (data.length != length - r) {
+			return new boolean[0];
+		}
+
+		boolean[] output = new boolean[length];
+
+		for (int i = 0; i < data.length; i++) {
+			if (!data[i]) {
+				continue;
+			}
+
+			boolean[] row = generator[i];
+
+			for (int j = 0; j < length; j++) {
+				output[j] ^= row[j];
+			}
+		}
+
+		return output;
+	}
+
+	public boolean[] decode(boolean[] code) {
+		if (code.length != length) {
+			return new boolean[0];
+		}
+
+		boolean[] data = new boolean[length - r];
+
+		
+
+		return data;
 	}
 
 	public static int getOptimumR(double channelNoise, double maxCorruption) {
