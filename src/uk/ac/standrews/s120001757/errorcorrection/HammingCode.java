@@ -19,7 +19,7 @@ public class HammingCode {
 		int currentRow = 0;
 		int currentIdentityRow = length - r;
 
-		for (int i = length - 1; i >= 0; i--) {
+		for (int i = length; i > 0; i--) {
 			int row;
 
 			// If i is a power of two, it's part of the identity matrix and goes at the bottom.
