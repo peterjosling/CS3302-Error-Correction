@@ -93,7 +93,7 @@ public class HammingCode {
 		return data;
 	}
 
-	public boolean[] getErrorCode(boolean[] codeword) {
+	public boolean[] getSyndrome(boolean[] codeword) {
 		if (codeword.length != length) {
 			return new boolean[0];
 		}

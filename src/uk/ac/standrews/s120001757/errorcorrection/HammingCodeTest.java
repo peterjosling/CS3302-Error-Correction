@@ -18,10 +18,10 @@ public class HammingCodeTest extends TestCase {
 	}
 
 	@Test
-	public void testgetErrorCode() {
+	public void testGetSyndrome() {
 		HammingCode code = new HammingCode(2);
 
-		assertTrue(Arrays.equals(code.getErrorCode(new boolean[]{true, true, false}), new boolean[]{false, true}));
-		assertTrue(Arrays.equals(code.getErrorCode(new boolean[]{true, true, true}), new boolean[]{false, false}));
+		assertTrue(Arrays.equals(code.getSyndrome(new boolean[]{true, true, false}), new boolean[]{false, true}));
+		assertTrue(Arrays.equals(code.getSyndrome(new boolean[]{true, true, true}), new boolean[]{false, false}));
 	}
 }
