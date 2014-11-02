@@ -1,5 +1,7 @@
 package uk.ac.standrews.s120001757.errorcorrection;
 
+import java.util.Arrays;
+
 public class HammingCode {
 	private static final int R_BOUND = 100;
 
@@ -84,16 +86,24 @@ public class HammingCode {
 		return output;
 	}
 
-	public boolean[] decode(boolean[] code) {
-		if (code.length != length) {
+	public boolean[] decode(boolean[] codeword) {
+		if (codeword.length != length) {
 			return new boolean[0];
 		}
 
-		boolean[] data = new boolean[length - r];
+		boolean[] syndrome = getSyndrome(codeword);
+		int syndromeInt = booleanArrayToInt(syndrome);
+		boolean[] errorCode = errorCodes[syndromeInt];
 
-		
+		// Correct input data using error code.
+		boolean[] corrected = new boolean[length];
 
-		return data;
+		for (int i = 0; i < length; i++) {
+			corrected[i] = codeword[i] ^ errorCode[i];
+		}
+
+		// Return data with parity bits removed.
+		return Arrays.copyOf(corrected, length - r);
 	}
 
 	public boolean[] getSyndrome(boolean[] codeword) {

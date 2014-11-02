@@ -5,7 +5,6 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertTrue;
 
 public class HammingCodeTest extends TestCase {
@@ -36,5 +35,35 @@ public class HammingCodeTest extends TestCase {
 		assertEquals(HammingCode.booleanArrayToInt(two), 2);
 		assertEquals(HammingCode.booleanArrayToInt(three), 3);
 		assertEquals(HammingCode.booleanArrayToInt(ten), 10);
+	}
+
+	@Test
+	public void testEncode() {
+		HammingCode code2 = new HammingCode(2);
+		HammingCode code3 = new HammingCode(3);
+
+		assertTrue(Arrays.equals(code2.encode(new boolean[]{true}), new boolean[]{true, true, true}));
+		assertTrue(Arrays.equals(code2.encode(new boolean[]{false}), new boolean[]{false, false, false}));
+
+		assertTrue(Arrays.equals(code3.encode(new boolean[]{false, true, false, true}), new boolean[]{false, true, false, true, true, false, true}));
+	}
+
+	@Test
+	public void testDecode() {
+		HammingCode code2 = new HammingCode(2);
+		HammingCode code3 = new HammingCode(3);
+
+		boolean[] input1 = new boolean[]{true};
+		boolean[] input2 = new boolean[]{false, true, false, true};
+
+		boolean[] enc1 = code2.encode(input1);
+		boolean[] enc2 = code3.encode(input2);
+		boolean[] corrupted = enc2.clone();
+
+		corrupted[3] = !corrupted[3];
+
+		assertTrue(Arrays.equals(code2.decode(enc1), input1));
+		assertTrue(Arrays.equals(code3.decode(enc2), input2));
+		assertTrue(Arrays.equals(code3.decode(corrupted), input2));
 	}
 }
