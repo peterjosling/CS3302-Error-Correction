@@ -5,14 +5,14 @@ import java.util.Random;
 
 public class Main {
 	public static void main(String[] args) {
-		getOptimumR();
-		encodeAndTransmit();
+		double errorProb = 0.001;
+
+//		int r = getOptimumR(errorProb, 0.001);
+//		encodeAndTransmit(r, errorProb, 12000000);
+		encodeAndTransmit(3, 0.1, 280000);
 	}
 
-	public static void getOptimumR() {
-		double errorProb = 0.001;
-		double maxCorruption = 0.01;
-
+	public static int getOptimumR(double errorProb, double maxCorruption) {
 		System.out.println("Error probability: " + errorProb);
 		System.out.println("Max corruption: " + maxCorruption);
 
@@ -26,13 +26,11 @@ public class Main {
 		System.out.println("Optimum r: " + r);
 		System.out.println("Information rate: " + HammingCode.getInformationRate(r));
 		System.out.println("Predicted corruption: " + HammingCode.getCorruptionRate(r, errorProb));
+
+		return r;
 	}
 
-	public static void encodeAndTransmit() {
-		double errorProb = 0.001;
-		int r = 7;
-		int length = 1200000;
-
+	public static void encodeAndTransmit(int r, double errorProb, int length) {
 		HammingCode code = new HammingCode(r);
 		NoisyChannel channel = new NoisyChannel(errorProb);
 
@@ -70,5 +68,6 @@ public class Main {
 		}
 
 		System.out.println("Proportion of bits corrupted: " + (double)corruptedBits / length);
+		System.out.println("Predicted proportion: " + HammingCode.getCorruptionRate(r, errorProb));
 	}
 }
