@@ -3,7 +3,7 @@ package uk.ac.standrews.s120001757.errorcorrection;
 import java.util.Arrays;
 
 public class HammingCode {
-	private static final int R_BOUND = 12;
+	public static final int R_BOUND = 12;
 
 	private int r;
 	private int length;

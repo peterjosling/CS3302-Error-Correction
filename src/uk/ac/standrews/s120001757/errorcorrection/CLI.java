@@ -13,6 +13,10 @@ public class CLI {
 		options.addOption("h", "help", false, "Show this help information.");
 		options.addOption("optimise", false, "Run the program in optimise mode to find the optimum Hamming code of length r for a given error probability and maximum corruption.");
 		options.addOption("encode", false, "Run the program in encode mode to encode and transmit some random data of a specified length for a given error probability and r value. The proportion of data bits corrupted will be printed.");
+		options.addOption("benchmark", false, "Run the benchmark suite and output data as CSV.");
+		options.addOption("crossover", false, "Find the crossover values for p and corruption.");
+		options.addOption("benchPredict", false, "Benchmark the accuracy of the corruption prediction algorithm.");
+
 		options.addOption("p", true, "The probability of an error occurring in the transmission channel, between 0 and 1. Required.");
 		options.addOption("maxCorruption", true, "The maximum proportion of data bits which may become corrupted, between 0 and 1. Required for optimise.");
 		options.addOption("r", true, "The value of r for the Hamming code, minimum 2. Required for encode.");
@@ -102,6 +106,21 @@ public class CLI {
 			return;
 		}
 
+		if (cmd.hasOption("benchmark")) {
+			Benchmark.benchmarkCorruption();
+			return;
+		}
+
+		if (cmd.hasOption("crossover")) {
+			Benchmark.findCrossover();
+			return;
+		}
+
+		if (cmd.hasOption("benchPredict")) {
+			Benchmark.benchmarkPredictions();
+			return;
+		}
+
 		// No valid arguments - show help.
 		help();
 	}
@@ -129,7 +148,11 @@ public class CLI {
 		return r;
 	}
 
-	public static void encodeAndTransmit(int r, double errorProb, int length) {
+	public static double encodeAndTransmit(int r, double errorProb, int length) {
+		return encodeAndTransmit(r, errorProb, length, false);
+	}
+
+	public static double encodeAndTransmit(int r, double errorProb, int length, boolean silent) {
 		HammingCode code = new HammingCode(r);
 		NoisyChannel channel = new NoisyChannel(errorProb);
 
@@ -138,7 +161,10 @@ public class CLI {
 
 		if (remainder != 0) {
 			length -= remainder;
-			System.out.println("Given length not a multiple of the word length - trimming down to " + length);
+
+			if (!silent) {
+				System.out.println("Given length not a multiple of the word length - trimming down to " + length);
+			}
 		}
 
 		boolean[] input = new boolean[length];
@@ -172,7 +198,13 @@ public class CLI {
 			}
 		}
 
-		System.out.println("Proportion of bits corrupted: " + (double)corruptedBits / length);
-		System.out.println("Predicted proportion: " + HammingCode.getCorruptionRate(r, errorProb));
+		double corruption = (double)corruptedBits / length;
+
+		if (!silent) {
+			System.out.println("Proportion of bits corrupted: " + corruption);
+			System.out.println("Predicted proportion: " + HammingCode.getCorruptionRate(r, errorProb));
+		}
+
+		return corruption;
 	}
 }
