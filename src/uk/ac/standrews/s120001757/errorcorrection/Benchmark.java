@@ -27,10 +27,11 @@ public class Benchmark {
 
 	public static void findCrossover() {
 		for (int r = 2; r <= HammingCode.R_BOUND; r++) {
-			double error = 0.25;
+			// Starting value must be inversely proportional to r. Fixed start value wont work for all r.
+			double error = 1 / Math.pow(r, 2);
 			double corruption = 0;
 
-			while (Math.abs(error - corruption) > 0.00001) {
+			while (Math.abs(error - corruption) > 0.000001) {
 				error += (error - corruption) / 2;
 
 				corruption = CLI.encodeAndTransmit(r, error, CROSSOVER_DATA_SIZE, true);
