@@ -143,7 +143,13 @@ public class HammingCode {
 	public static double getCorruptionRate(int r, double channelNoise) {
 		int length = (int)Math.pow(2, r) - 1;
 
-		return 3d / length * getBlockCorruptionRate(r, channelNoise);
+		// Average number of corrupted input bits given the block is corrupt - so minimum 2.
+		double averageCorruptedInputBits = Math.max(channelNoise * length, 2);
+
+		// Average number of bits corrupted will be a multiple of 3 (the minimum distance).
+		int averageCorruptedOutputBits = ((int)averageCorruptedInputBits + 1) / 3 * 3;
+
+		return (double)averageCorruptedOutputBits / length * getBlockCorruptionRate(r, channelNoise);
 	}
 
 	public static double getBlockCorruptionRate(int r, double channelNoise) {
