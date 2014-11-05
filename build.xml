@@ -34,7 +34,10 @@
             <attribute name="Main-Class"
                        value="uk.ac.standrews.s120001757.errorcorrection.Main" />
         </manifest>
-        <jar jarfile="${dist}/lib/error-correction.jar" basedir="${build}" manifest="${build}/MANIFEST.MF"/>
+        <jar jarfile="${dist}/lib/error-correction.jar" basedir="${build}" manifest="${build}/MANIFEST.MF">
+            <fileset dir="${build}" includes="**/*.class" />
+            <zipgroupfileset dir="lib" includes="commons-cli-1.2.jar" />
+        </jar>
     </target>
 
     <target name="clean"
