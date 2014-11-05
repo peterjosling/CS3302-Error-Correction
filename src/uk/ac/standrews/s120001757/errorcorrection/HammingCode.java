@@ -131,7 +131,6 @@ public class HammingCode {
 		while (totalCorruption < maxCorruption && r <= R_BOUND) {
 			r++;
 			totalCorruption = getCorruptionRate(r, channelNoise);
-//			System.out.println(totalCorruption);
 		}
 
 		return r - 1;
