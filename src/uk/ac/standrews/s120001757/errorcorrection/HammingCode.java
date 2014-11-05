@@ -1,11 +1,9 @@
 package uk.ac.standrews.s120001757.errorcorrection;
 
-import java.math.BigInteger;
 import java.util.Arrays;
 
 public class HammingCode {
-	private static final int R_BOUND = 10;
-	private static final long[][] PASCAL_TRIANGLE = new long[R_BOUND + 1][];
+	private static final int R_BOUND = 12;
 
 	private int r;
 	private int length;
@@ -144,17 +142,19 @@ public class HammingCode {
 
 	public static double getCorruptionRate(int r, double channelNoise) {
 		int length = (int)Math.pow(2, r) - 1;
+
+		return 3d / length * getBlockCorruptionRate(r, channelNoise);
+	}
+
+	public static double getBlockCorruptionRate(int r, double channelNoise) {
+		int length = (int)Math.pow(2, r) - 1;
 		double iChannelNoise = 1 - channelNoise;
 
-		double rate = 0;
+		// Proportion of corrupted bits is 1 - (probability of 0 corrupted + probability of 1 corrupted).
+		double probZeroErrors = Math.pow(iChannelNoise, length);
+		double probOneError = length * Math.pow(iChannelNoise, length - 1) * channelNoise;
 
-		for (int i = 2; i <= length; i++) {
-			int bitsCorrupted = (i + 1) / 3 * 3;
-
-			rate += nCr(length, i) * Math.pow(channelNoise, i) * Math.pow(iChannelNoise, length - i) * ((double)bitsCorrupted / length);
-		}
-
-		return rate;
+		return 1 - (probZeroErrors + probOneError);
 	}
 
 	public static int booleanArrayToInt(boolean[] booleans) {
@@ -165,51 +165,5 @@ public class HammingCode {
 		}
 
 		return n;
-	}
-
-	static double nCr(final int N, final int K) {
-		BigInteger ret = BigInteger.ONE;
-		for (int k = 0; k < K; k++) {
-			ret = ret.multiply(BigInteger.valueOf(N-k))
-					.divide(BigInteger.valueOf(k+1));
-		}
-		return ret.doubleValue();
-	}
-
-//	public static double nCr(int n, int r) {
-//		return factorial(n) / (factorial(n - r) * factorial(r));
-//	}
-
-//	public static long nCr(int n, int r) {
-//		if (PASCAL_TRIANGLE[n] == null) {
-//			generatePascalRow(n);
-//		}
-//
-//		return PASCAL_TRIANGLE[n][r];
-//	}
-//
-//	private static void generatePascalRow(int n) {
-//		if (n > 1 && PASCAL_TRIANGLE[n - 1] == null) {
-//			generatePascalRow(n - 1);
-//		}
-//
-//		long[] row = new long[n + 1];
-//		long[] prevRow = PASCAL_TRIANGLE[n - 1];
-//
-//		row[0] = row[n] = 1;
-//
-//		for (int i = 1; i < n; i++) {
-//			row[i] = prevRow[i - 1] + prevRow[i];
-//		}
-//
-//		PASCAL_TRIANGLE[n] = row;
-//	}
-
-	public static double factorial(int n) {
-		if (n <= 1) {
-			return 1;
-		}
-
-		return n * factorial(n - 1);
 	}
 }
